@@ -32,7 +32,7 @@ const Products: React.FC<Props> = ({ heading, products, setRefresh }) => {
                     <li className="products-item" key={product._id}>  
                         <a href={`/products/${product._id}`} className="product-link">
                             <img 
-                                src={`https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev/${product.productImages}`} 
+                                src={`https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev${product.productImages}`} 
                                 alt={product.productNames} 
                                 className="product-image"
                             />
