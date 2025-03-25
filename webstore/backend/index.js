@@ -10,6 +10,9 @@ const sharp = require("sharp");
 const fs = require("fs");
 const resizeImages = require("./resizeImages");
 const port = 3000;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 
 app.use(cors({
   origin: "https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev", 
@@ -55,9 +58,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 } // Allow max 10MB file size
 });
 
-
-
-
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
     console.log('Received file:', req.file); // Debug: Check if file is received
@@ -85,7 +85,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const newProduct = await Product.create({
       productNames: req.body.productNames,
       productPrices: req.body.productPrices,
-      productImages: `/uploads/${resizedFilename}`, // Store new resized file path
+      productImages: `/uploads/${resizedFilename}`, 
+      description: req.body.description,
     });
 
     res.json({ message: "Image uploaded & resized successfully!", product: newProduct });
@@ -132,17 +133,93 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     product.productNames = req.body.productNames;
     product.productPrices = req.body.productPrices;
     product.productImages = req.body.productImages;
+    product.description = req.body.description;
     await product.save();
     res.redirect(`/products/${product._id}`);
   })
   
-  app.get('/product/:id', async (req, res) => {
-    const data = {
-      student: await Product.findById(req.params.id)
-    };
-    res.json(data);
+  app.get('/products/:id', async (req, res) => {
+    try {
+      const product = await Product.findById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   });
+
+  app.post('/signup', async (req, res) => {
+    const { email, password } = req.body;
   
+    try {
+      // Hash the password before saving to DB
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create the user in the database
+      const newUser = await User.create({ email, password: hashedPassword });
+  
+      // Create JWT token for the new user
+      const token = jwt.sign({ id: newUser._id }, 'your_jwt_secret', { expiresIn: '1h' });
+  
+      res.json({ message: 'Sign up successful', token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error during sign up' });
+    }
+  });
+
+  app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid credentials' });
+      }
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Invalid credentials' });
+      }
+  
+      const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+      res.json({ message: 'Login successful', token });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+
+// Middleware to check if the user is authenticated
+const authenticateJWT = (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+
+  jwt.verify(token, 'your_jwt_secret', (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid or expired token.' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// Protected route example
+app.get('/protected-route', authenticateJWT, (req, res) => {
+  res.send('This is a protected route.');
+});
+
+
+
+  
+
+  
+  /*
   app.get('*', async (req,res) => {
     res.sendFile(path.join(__dirname, '../frontend/react/dist/index.html'));
-  });
+  });*/

@@ -1,0 +1,48 @@
+/* General styles for the menu */
+.menu {
+    display: flex;
+    justify-content: flex-start; /* Align buttons to the left */
+    gap: 20px; /* Space between buttons */
+    background-color: #333; /* Dark background */
+    padding: 10px; /* Padding to give the menu some space */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it stays on top */
+  }
+  
+  .menu ul {
+    list-style: none; /* Remove default list dots */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex; /* Make the list items display in a row */
+  }
+  
+  .menu li {
+    /* Optionally, if you want more spacing between each link, add margin here */
+    margin-left: 20px;
+  }
+  
+  .menu .menu-button {
+    background-color: #6c757d; /* Grey background */
+    color: white;
+    text-decoration: none; /* Remove underline for links */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    display: block; /* Make the link behave like a block element */
+    padding: 10px 20px; /* Ensure padding works properly */
+  }
+  
+  /* Hover effect */
+  .menu .menu-button:hover {
+    background-color: #5a6268; /* Darker grey when hovering */
+  }
+  
+  /* Remove outline on focus */
+  .menu .menu-button:focus {
+    outline: none;
+  }
+  

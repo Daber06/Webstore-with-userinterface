@@ -1,0 +1,22 @@
+.product-detail {
+  display: flex;
+  flex-direction: row;
+  margin-top: 60px;
+}
+
+.product-detail-image {
+  width: 50vw;
+  height: 100vh;
+  object-fit: cover; 
+}
+
+.product-detail-description {
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+}
+
+.product-detail-description p {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}

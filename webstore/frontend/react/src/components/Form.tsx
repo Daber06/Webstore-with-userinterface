@@ -9,6 +9,7 @@ interface Props {
 const Form = ({ setRefresh }: Props) => {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [productImage, setProductImage] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,6 +17,7 @@ const Form = ({ setRefresh }: Props) => {
     const formData = new FormData();
     formData.append("productNames", productName);
     formData.append("productPrices", productPrice);
+    formData.append("description", description);
     if (productImage) formData.append("image", productImage);
 
     try {
@@ -44,6 +46,14 @@ const Form = ({ setRefresh }: Props) => {
         placeholder="Price"
         value={productPrice}
         onChange={(e) => setProductPrice(e.target.value)}
+        required
+        className="form-input"
+      />
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         required
         className="form-input"
       />
