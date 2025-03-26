@@ -36,13 +36,15 @@ function App() {
     <Router>
       <div className="app-container">
         <Menu />
-        <Routes>
-          <Route path="/" element={<Products products={products} heading="Products" setRefresh={setRefresh} />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/products/:productId" element={<ProductDetail />} /> {/* Add the new route for product details */}
-        </Routes>
+        <div className="main-content"> 
+          <Routes>
+            <Route path="/" element={<Products products={products} heading="Products" setRefresh={setRefresh} />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/products/:productId" element={<ProductDetail />} /> 
+          </Routes>
+        </div>
         <Footer />
       </div>
     </Router>

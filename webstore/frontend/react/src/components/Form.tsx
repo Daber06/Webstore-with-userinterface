@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "../styles/Form.css"; //  Keep CSS import
+import "../styles/Form.css"; 
 
 interface Props {
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +25,7 @@ const Form = ({ setRefresh }: Props) => {
       setProductName("");
       setProductPrice("");
       setProductImage(null);
-      setRefresh(prev => !prev); // ✅ Refresh product list
+      setRefresh(prev => !prev);
     } catch (error) {
       console.error("Error uploading product:", error);
     }

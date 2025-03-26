@@ -13,7 +13,7 @@ const Menu: React.FC = () => {
           <Link to="/cart" className="menu-button">Cart</Link>
         </li>
         <li>
-          <Link to="/signup" className="menu-button">Signup</Link>
+          <Link to="/signup" className="menu-button">Sign up</Link>
         </li>
         <li>
           <Link to="/about" className="menu-button">About Us</Link>

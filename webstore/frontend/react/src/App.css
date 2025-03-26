@@ -1,8 +1,11 @@
 .app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
   background-color: #6c757d;
-  color: #fff; 
-  min-height: 100vh; /
+  color: #fff;
 }
+
 
 body, html {
   margin: 0;
@@ -11,7 +14,9 @@ body, html {
   height: 100%;
 }
 
-footer {
-  width: 100%;
-}
 
+.main-content {
+  flex-grow: 1; 
+  padding: 20px; 
+  margin-top: 56px;
+}
