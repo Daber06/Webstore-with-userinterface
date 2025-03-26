@@ -66,6 +66,7 @@ const Cart: React.FC = () => {
     } else {
       const updatedCart = cart.filter((item) => item._id !== id);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      console.log(updatedCart);
       setCart(updatedCart);
     }
   };
@@ -83,6 +84,7 @@ const Cart: React.FC = () => {
           console.log("Full Image URL:", imageUrl);
           console.log(product.productImages);
           console.log(product.productPrices);
+          console.log(product);
 
           return (
             <li className="cart-product" key={product._id}>
