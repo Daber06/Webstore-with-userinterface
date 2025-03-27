@@ -28,8 +28,13 @@ const Cart: React.FC = () => {
               },
             }
           );
-          console.log("Cart data from API:", response.data.products);
-          setCart(Array.isArray(response.data.products) ? response.data.products : []);
+          const formattedCart = response.data.products.map((item: Product) => ({
+            _id: item._id,
+            productNames: item.productNames,
+            productPrices: item.productPrices,
+            productImages: item.productImages 
+          }));
+          setCart(formattedCart);
         } else {
           const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
           console.log("Stored Cart from LocalStorage:", storedCart);
