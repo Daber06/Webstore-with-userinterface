@@ -28,8 +28,8 @@ const Cart: React.FC = () => {
               },
             }
           );
-          console.log("Cart data from API:", response.data);
-          setCart(response.data.products || []); 
+          console.log("Cart data from API:", response.data.products);
+          setCart(Array.isArray(response.data.products) ? response.data.products : []);
         } else {
           const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
           console.log("Stored Cart from LocalStorage:", storedCart);
@@ -84,7 +84,7 @@ const Cart: React.FC = () => {
           console.log("Full Image URL:", imageUrl);
           console.log(product.productImages);
           console.log(product.productPrices);
-          console.log(product);
+          console.log(product); 
 
           return (
             <li className="cart-product" key={product._id}>
