@@ -3,15 +3,16 @@ import "../styles/Cart.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-interface Product {
-  _id: string;
+interface CartProduct {
+  cartItemId: string;
+  _id: string; 
   productNames: string;
   productPrices: string;
   productImages: string;
 }
 
 const Cart: React.FC = () => {
-  const [cart, setCart] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartProduct[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token"); 
@@ -28,12 +29,17 @@ const Cart: React.FC = () => {
               },
             }
           );
-          const formattedCart = response.data.products.map((item: Product) => ({
-            _id: item._id,
-            productNames: item.productNames,
-            productPrices: item.productPrices,
-            productImages: item.productImages 
+          const formattedCart: CartProduct[] = response.data.products
+          .filter((item: any) => item.productId !== null)
+          .map((item: any) => ({
+            cartItemId: item._id,
+            _id: item.productId._id,
+            productNames: item.productId.productNames,
+            productPrices: item.productId.productPrices,
+            productImages: item.productId.productImages
           }));
+          
+          console.log("Cart from API: ", formattedCart)
           setCart(formattedCart);
         } else {
           const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -49,13 +55,13 @@ const Cart: React.FC = () => {
     fetchCart();
   }, []);
 
-  const handleRemoveFromCart = (id: string) => {
+  const handleRemoveFromCart = (productId: string) => {
     const token = localStorage.getItem("token");
 
     if (token) {
       axios
         .delete(
-          `https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev/cart/${id}`,
+          `https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev/cart/${productId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -63,15 +69,26 @@ const Cart: React.FC = () => {
           }
         )
         .then((response) => {
-          setCart(response.data.cart.products); 
+          console.log('Response data from server:', response.data);
+          const formattedCart: CartProduct[] = response.data.prouct
+          .filter((item: any) => item.productId !== null)
+          .map((item: any) => ({
+            cartItemid: item._id,
+            _id: item.productId._id,
+            productNames: item.productId.productNames,
+            productPrices: item.productId.productPrices,
+            productImages: item.productId.productImages
+          }));
+          setCart(formattedCart); 
         })
         .catch((error) => {
           console.error("Error removing product from cart:", error);
         });
     } else {
-      const updatedCart = cart.filter((item) => item._id !== id);
+      const updatedCart = cart.filter((item) => item._id !== productId);
+      console.log("ProductId: ", productId)
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      console.log(updatedCart);
+      console.log("UpdatedCart: ", updatedCart);
       setCart(updatedCart);
     }
   };
@@ -105,7 +122,7 @@ const Cart: React.FC = () => {
                 </div>
               </Link>
               <button
-                onClick={() => handleRemoveFromCart(product._id)}
+                onClick={() => handleRemoveFromCart(product.cartItemId || product._id)}
                 className="remove-from-cart-button"
               >
                 Remove
