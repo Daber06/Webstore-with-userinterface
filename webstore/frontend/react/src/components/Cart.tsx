@@ -94,25 +94,18 @@ const Cart: React.FC = () => {
   };
 
   if (cart.length === 0) {
-    return <div>Your cart is empty.</div>;
+    return <div className="cart-empty">Your cart is empty.</div>;
   }
 
   return (
     <div className="cart-container">
       <h1>Cart</h1>
       <ul className="cart-products">
-        {cart.map((product) => {
-          const imageUrl = `https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev${product.productImages}`;
-          console.log("Full Image URL:", imageUrl);
-          console.log(product.productImages);
-          console.log(product.productPrices);
-          console.log(product); 
-
-          return (
+        {cart.map((product) => (
             <li className="cart-product" key={product._id}>
               <Link to={`/products/${product._id}`} className="product-link">
                 <img
-                  src={imageUrl}
+                  src={`https://bookish-eureka-r4gjvvr5jqq93x9wp-3000.app.github.dev${product.productImages}`}
                   alt={product.productNames}
                   className="product-image"
                 />
@@ -128,8 +121,7 @@ const Cart: React.FC = () => {
                 Remove
               </button>
             </li>
-          );
-        })}
+        ))}
       </ul>
     </div>
   );
