@@ -70,7 +70,7 @@ const Cart: React.FC = () => {
         )
         .then((response) => {
           console.log('Response data from server:', response.data);
-          const formattedCart: CartProduct[] = response.data.prouct
+          const formattedCart: CartProduct[] = response.data.product
           .filter((item: any) => item.productId !== null)
           .map((item: any) => ({
             cartItemid: item._id,
